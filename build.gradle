@@ -1,0 +1,53 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '2.0.20'
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'dev.architectury.loom' version '1.7-SNAPSHOT'
+}
+
+architectury {
+    minecraft = '1.21.1'
+}
+
+group = 'org.figsq.cobpasture.cobpasture.CobPasture'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+
+    mavenCentral()
+
+    maven {
+        url = 'https://maven.impactdev.net/repository/development/'
+    }
+
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.21.1"
+    mappings loom.officialMojangMappings()
+
+    modCompileOnly("com.cobblemon:mod:1.6.1+1.21.1")
+
+
+    compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+}
+
+processResources {
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand project.properties
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(17)
+}

@@ -1,0 +1,10 @@
+name: ${project.name}
+main: ${group]
+version: ${version}
+api-version: 1.21
+depend:
+  - FICore
+commands:
+  cobpasture:
+    description: CobPasture command
+permissions:
