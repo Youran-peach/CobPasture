@@ -1,4 +1,4 @@
-package org.figsq.cobpasture.cobpasture.breedlogic
+package org.figsq.cobpasture.cobpasture.api.breedlogic
 
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
@@ -10,7 +10,7 @@ import org.figsq.cobpasture.cobpasture.CobPasture
 import kotlin.random.Random
 
 object BreedLogicImpl : BreedLogic {
-    fun canBreed(parent1: Pokemon, parent2: Pokemon): Boolean {
+    override fun canBreed(parent1: Pokemon, parent2: Pokemon): Boolean {
         if (parent1 === parent2) return false
         val isDitto1 = parent1.species.name == "ditto"
         val isDitto2 = parent2.species.name == "ditto"
@@ -33,7 +33,7 @@ object BreedLogicImpl : BreedLogic {
         return groups.find { it == EggGroup.UNDISCOVERED } != null
     }
 
-    override fun makeEggPokemon(
+    override fun makeEgg(
         parent1: Pokemon,
         parent2: Pokemon
     ): Pokemon? {

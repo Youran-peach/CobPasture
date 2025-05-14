@@ -2,7 +2,8 @@ package org.figsq.cobpasture.cobpasture
 
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
-import org.figsq.cobpasture.cobpasture.breedlogic.BreedLogicManager
+import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
+import org.figsq.cobpasture.cobpasture.api.playerdata.DataManager
 
 class CobPasture : JavaPlugin() {
     companion object {
@@ -33,6 +34,7 @@ class CobPasture : JavaPlugin() {
         this.saveDefaultConfig()
         super.reloadConfig()
         BreedLogicManager.load()
+        DataManager.load()
     }
 
     override fun onDisable() {

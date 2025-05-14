@@ -1,4 +1,4 @@
-package org.figsq.cobpasture.cobpasture.breedlogic
+package org.figsq.cobpasture.cobpasture.api.breedlogic
 
 object BreedLogicManager {
     //可以被替换的

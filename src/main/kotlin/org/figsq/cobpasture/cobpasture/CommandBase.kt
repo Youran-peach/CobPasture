@@ -6,7 +6,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
-import org.figsq.cobpasture.cobpasture.breedlogic.BreedLogicManager
+import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
 
 object CommandBase : TabExecutor {
     val subCmdList = listOf(

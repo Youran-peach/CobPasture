@@ -6,5 +6,9 @@ depend:
   - FICore
 commands:
   cobpasture:
-    description: CobPasture command
+    description: CobPzasture command
 permissions:
+  cobpasture.cmd.reload:
+    default: op
+  cobpasture.cmd.makeegg:
+    default: op
