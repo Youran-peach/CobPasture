@@ -2,8 +2,10 @@ package org.figsq.cobpasture.cobpasture.api
 
 import com.cobblemon.mod.common.pokemon.Pokemon
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
 import org.figsq.cobpasture.cobpasture.api.events.PastureMakeEggEvent
+import org.figsq.cobpasture.cobpasture.gui.PastureGui
 
 class Pasture {
     var parent1: Pokemon? = null
@@ -30,12 +32,14 @@ class Pasture {
     fun makeEgg() {
         if (this.egg != null) return
         if (parent1 != null && parent2 != null) {
+            //事件触发
             val event = PastureMakeEggEvent(
                 this,
                 BreedLogicManager.breedLogic.makeEggPokemon(parent1!!, parent2!!)
             )
             Bukkit.getServer().pluginManager.callEvent(event)
             if (event.isCancelled) return
+            //获取事件修改结果
             this.egg = event.egg
 
 
@@ -67,6 +71,13 @@ class Pasture {
      */
     fun needCheck(): Boolean {
         return this.tick > -1
+    }
+
+    /**
+     * 玩家打开临时容器(多个玩家同时打开大概率出毛病)
+     */
+    fun open(player: Player) {
+        player.openInventory(PastureGui(this).inventory)
     }
 
     //没有打算写tick方法 所有检测都是在 DataManager.unifiedPastureDetector 中完成

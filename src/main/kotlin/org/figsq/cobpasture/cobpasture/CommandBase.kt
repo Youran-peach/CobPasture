@@ -2,16 +2,22 @@ package org.figsq.cobpasture.cobpasture
 
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
+import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
+import org.figsq.cobpasture.cobpasture.api.Pasture
 import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
+import org.figsq.cobpasture.cobpasture.api.playerdata.DataManager
+import org.figsq.cobpasture.cobpasture.gui.PastureListGui
 
 object CommandBase : TabExecutor {
     val subCmdList = listOf(
         "help", "reload",
-        "makeegg"
+        "makeegg",
+        "open",
+        "add"
     )
     val helpMsg = arrayOf(
         "§a帮助信息",
@@ -26,6 +32,13 @@ object CommandBase : TabExecutor {
         return when (args.size) {
             0 -> subCmdList
             1 -> subCmdList.filter { it.startsWith(args[0]) }
+            2 -> when (args[0].lowercase()) {
+                "add" -> {
+                    return Bukkit.getOnlinePlayers().map { it.name }
+                }
+                else -> {null}
+            }
+
             else -> null
         }
     }
@@ -93,6 +106,43 @@ object CommandBase : TabExecutor {
                     } ?: sender.sendMessage("§c无法产出!")
                     true
                 }
+
+                "open" -> {
+                    if (sender !is Player) {
+                        sender.sendMessage("§c该指令只能由玩家执行!")
+                        return false
+                    }
+
+                    val playerData = DataManager.playerDataManager.getPlayerData(sender.uniqueId)
+                    if (playerData.pastures.isEmpty()) {
+                        sender.sendMessage("§c你的牧场数量为0")
+                        return false
+                    }
+                    val gui = PastureListGui(playerData.pastures)
+                    sender.openInventory(gui.inventory)
+                    true
+                }
+
+                /**
+                 * 增加一个牧场
+                 */
+                "add" -> {
+                    val player = args.getOrNull(1)?.let { Bukkit.getPlayer(it) } ?: run {
+                        sender.sendMessage("§c参数错误(玩家名) 不存在或不在线!")
+                        return false
+                    }
+                    val playerData = DataManager.playerDataManager.getPlayerData(player.uniqueId)
+                    val max = CobPasture.INSTANCE.config.getInt("player-max-pasture")
+                    if (playerData.pastures.size < max) {
+                        playerData.pastures.add(Pasture())
+                        playerData.save()
+                        sender.sendMessage("§a添加牧场成功")
+                        return true
+                    }
+                    sender.sendMessage("§c你的牧场数量已经达到上限")
+                    false
+                }
+
                 else -> false
             }
         }

@@ -13,8 +13,12 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenLocal()
-
     mavenCentral()
+
+    maven {
+        allowInsecureProtocol = true
+        url "http://server.pokemtd.top:31647/snapshots"
+    }
 
     maven {
         url = 'https://maven.impactdev.net/repository/development/'
@@ -27,13 +31,16 @@ repositories {
 }
 
 dependencies {
+    /*<-minecraft->*/
     minecraft "com.mojang:minecraft:1.21.1"
     mappings loom.officialMojangMappings()
-
+    /*<-cobblemon->*/
     modCompileOnly("com.cobblemon:mod:1.6.1+1.21.1")
 
-
+    /*<-spigot->*/
     compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+    /*<-spigot plugin depend->*/
+    compileOnly 'me.fullidle.ficore.ficore:FICore:1.2.9'
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
