@@ -25,9 +25,9 @@ class CobPasture : JavaPlugin() {
         val console = Bukkit.getConsoleSender()
         /*
         //付费下载的时候构建构建这个的
-        console.sendMessage("§a哦~插件启动了奥~不过呢插件为完成呢~(哦？你付费买的，为什么不自己构建一个呢，代码开源的~(其实我不想知道为什么))")
+        console.sendMessage("§a哦~插件启动了奥~不过呢插件未完成呢~(哦？你付费买的，为什么不自己构建一个呢，代码开源的~(其实我不想知道为什么))")
         * */
-        console.sendMessage("§a哦~插件启动了奥~不过呢插件为完成呢~")
+        console.sendMessage("§a哦~插件启动了奥~不过呢插件未完成呢~")
     }
 
     override fun reloadConfig() {
