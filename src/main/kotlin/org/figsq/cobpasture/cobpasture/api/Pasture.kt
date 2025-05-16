@@ -3,6 +3,7 @@ package org.figsq.cobpasture.cobpasture.api
 import com.cobblemon.mod.common.pokemon.Pokemon
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
 import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
 import org.figsq.cobpasture.cobpasture.api.events.PastureMakeEggEvent
 import org.figsq.cobpasture.cobpasture.gui.PastureGui
@@ -76,8 +77,8 @@ class Pasture {
     /**
      * 玩家打开临时容器(多个玩家同时打开大概率出毛病)
      */
-    fun open(player: Player) {
-        player.openInventory(PastureGui(this).inventory)
+    fun open(player: Player, previous: Inventory?) {
+        player.openInventory(PastureGui(this, previous).inventory)
     }
 
     //没有打算写tick方法 所有检测都是在 DataManager.unifiedPastureDetector 中完成

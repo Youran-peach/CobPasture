@@ -1,20 +1,16 @@
 package org.figsq.cobpasture.cobpasture.api.gsonadapter
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonSerializationContext
+import com.google.gson.*
 import org.figsq.cobpasture.cobpasture.api.Pasture
 import org.figsq.cobpasture.cobpasture.api.playerdata.PlayerData
 import java.lang.reflect.Type
-import java.util.UUID
+import java.util.*
 
 object PlayerDataGsonAdapter : GsonAdapter<PlayerData> {
     override fun serialize(
         src: PlayerData,
         typeOfSrc: Type,
-        context: JsonSerializationContext
+        context: JsonSerializationContext,
     ): JsonElement {
         return JsonObject().apply {
             this.addProperty("uuid", src.uuid.toString())
@@ -27,7 +23,7 @@ object PlayerDataGsonAdapter : GsonAdapter<PlayerData> {
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        context: JsonDeserializationContext,
     ): PlayerData {
         val jsonObject = json.asJsonObject
         return PlayerData(

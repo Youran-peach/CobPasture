@@ -1,11 +1,15 @@
 package org.figsq.cobpasture.cobpasture.gui
 
 import com.cobblemon.mod.common.item.PokemonItem
+import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.getPlayer
+import com.cobblemon.mod.common.util.party
 import de.tr7zw.nbtapi.NBT
 import me.fullidle.ficore.ficore.common.api.ineventory.ListenerInvHolder
 import me.fullidle.ficore.ficore.common.bukkit.inventory.CraftItemStack
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.HumanEntity
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
@@ -15,8 +19,33 @@ import org.figsq.cobpasture.cobpasture.api.gsonadapter.GsonHelper
 
 class PastureGui(
     val pasture: Pasture,
-    val previous: Inventory?,
-) : ListenerInvHolder() {
+    var previous: Inventory?,
+) : ListenerInvHolder(), AcceptOptional<PartySelectGui> {
+    enum class OptionalSlot(
+        val setSlot: (PastureGui, Pokemon) -> Unit,
+    ) {
+        PARENT1({ pastureGui, pokemon ->
+            pastureGui.pasture.parent1 = pokemon
+            pastureGui.inventory.setItem(10, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
+                val itemMeta = this.itemMeta!!
+                itemMeta.setDisplayName("${pokemon.getDisplayName().string}")
+                itemMeta.lore = listOf("Parent 1")
+            })
+        }),
+        PARENT2({ pastureGui, pokemon ->
+            pastureGui.pasture.parent2 = pokemon
+            pastureGui.inventory.setItem(10, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
+                val itemMeta = this.itemMeta!!
+                itemMeta.setDisplayName("${pokemon.getDisplayName().string}")
+                itemMeta.lore = listOf("Parent 2")
+            })
+        });
+
+        fun setSlot(pastureGui: PastureGui, pokemon: Pokemon) {
+            setSlot.invoke(pastureGui, pokemon)
+        }
+    }
+
     private val inventory = Bukkit.createInventory(this, 27, "Pasture Gui").apply {
         /*
         "aaabbbccc"
@@ -79,7 +108,7 @@ class PastureGui(
         onClose { e ->
             if (previous == null) return@onClose
             Bukkit.getScheduler().runTask(CobPasture.INSTANCE, Runnable {
-                e.player.openInventory(previous)
+                e.player.openInventory(previous!!)
             })
         }
 
@@ -90,13 +119,38 @@ class PastureGui(
             val slot = e.slot
 
             //parent1
+            val human = e.whoClicked
             if (slot == 10) {
-                //TODO 父母宝可梦设置没写
+                if (pasture.parent1 == null) {
+                    //选择精灵
+                    silentOpen(
+                        human, PartySelectGui(
+                            human.uniqueId.getPlayer()!!.party(), OptionalSlot.PARENT1, this
+                        ).inventory
+                    )
+                    return@onClick
+                }
+                //移除
+                human.uniqueId.getPlayer()!!.party().add(pasture.parent1!!)
+                pasture.parent1 = null
+                return@onClick
             }
 
             //parent2
             if (slot == 16) {
-
+                if (pasture.parent2 == null) {
+                    //选择精灵
+                    silentOpen(
+                        human, PartySelectGui(
+                            human.uniqueId.getPlayer()!!.party(), OptionalSlot.PARENT2, this
+                        ).inventory
+                    )
+                    return@onClick
+                }
+                //移除
+                human.uniqueId.getPlayer()!!.party().add(pasture.parent2!!)
+                pasture.parent2 = null
+                return@onClick
             }
 
             //egg
@@ -107,7 +161,7 @@ class PastureGui(
                     nbt.setString("cobpasture", GsonHelper.GSON.toJson(pasture.egg!!))
                 }
 
-                val eyeLocation = e.whoClicked.eyeLocation
+                val eyeLocation = human.eyeLocation
                 val dropItem = eyeLocation.world!!.dropItem(eyeLocation, itemStack)
                 dropItem.pickupDelay = 0
                 dropItem.isInvulnerable = true
@@ -120,5 +174,18 @@ class PastureGui(
 
     override fun getInventory(): Inventory {
         return inventory
+    }
+
+    override fun accept(e: PartySelectGui) {
+        e.pokemon?.let {
+            e.optionalSlot.setSlot(this, it)
+        }
+    }
+
+    fun silentOpen(human: HumanEntity, inventory: Inventory) {
+        this.previous.apply {
+            previous = null
+            human.openInventory(inventory)
+        }.also { this.previous = it }
     }
 }

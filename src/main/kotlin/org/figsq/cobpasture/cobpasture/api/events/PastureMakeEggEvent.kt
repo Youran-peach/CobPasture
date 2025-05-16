@@ -16,8 +16,7 @@ class PastureMakeEggEvent(
     var egg: Pokemon?,
 ) : Event(), Cancellable {
     companion object {
-        @JvmStatic
-        var handlerList: HandlerList = HandlerList()
+        private var handlerList: HandlerList = HandlerList()
 
         @JvmStatic
         fun getHandlerList(): HandlerList {

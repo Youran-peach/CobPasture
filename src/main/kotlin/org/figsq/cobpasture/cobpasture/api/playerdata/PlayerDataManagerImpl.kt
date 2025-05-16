@@ -3,7 +3,7 @@ package org.figsq.cobpasture.cobpasture.api.playerdata
 import org.figsq.cobpasture.cobpasture.CobPasture
 import org.figsq.cobpasture.cobpasture.api.gsonadapter.GsonHelper
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 object PlayerDataManagerImpl : PlayerDataManager {
     val folder: File by lazy {

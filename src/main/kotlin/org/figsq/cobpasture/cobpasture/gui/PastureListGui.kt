@@ -5,10 +5,11 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.PlayerInventory
 import org.figsq.cobpasture.cobpasture.api.Pasture
 
 class PastureListGui(
-    val pastures: List<Pasture>
+    val pastures: List<Pasture>,
 ) : ListenerInvHolder() {
 
     private val inventory = Bukkit.createInventory(this, 54, "Pasture List GUI").apply {
@@ -24,6 +25,7 @@ class PastureListGui(
     init {
         onClick { e ->
             e.isCancelled = true
+            if (e.clickedInventory is PlayerInventory) return@onClick
             if (e.currentItem == null) return@onClick
             val displayName = e.currentItem?.itemMeta?.displayName ?: return@onClick
             if (!(displayName.contains("Pasture"))) return@onClick

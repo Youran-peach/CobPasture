@@ -1,5 +1,5 @@
-name: ${project.name}
-main: ${group]
+name: CobPasture
+main: ${group}
 version: ${version}
 api-version: 1.21
 depend:

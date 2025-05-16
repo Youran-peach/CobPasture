@@ -35,7 +35,7 @@ object BreedLogicImpl : BreedLogic {
 
     override fun makeEgg(
         parent1: Pokemon,
-        parent2: Pokemon
+        parent2: Pokemon,
     ): Pokemon? {
         if (!canBreed(parent1, parent2)) return null //不可产出返回空
         //选择继承后的宝可梦物种

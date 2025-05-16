@@ -4,7 +4,7 @@ object BreedLogicManager {
     //可以被替换的
     var breedLogic: BreedLogic = BreedLogicImpl
 
-    fun load(){
+    fun load() {
         //TODO 加载
     }
 }

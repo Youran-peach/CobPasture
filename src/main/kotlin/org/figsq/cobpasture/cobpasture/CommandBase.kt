@@ -27,7 +27,7 @@ object CommandBase : TabExecutor {
         sender: CommandSender,
         cmd: Command,
         label: String,
-        args: Array<out String>
+        args: Array<out String>,
     ): List<String>? {
         return when (args.size) {
             0 -> subCmdList
@@ -36,7 +36,10 @@ object CommandBase : TabExecutor {
                 "add" -> {
                     return Bukkit.getOnlinePlayers().map { it.name }
                 }
-                else -> {null}
+
+                else -> {
+                    null
+                }
             }
 
             else -> null
@@ -47,7 +50,7 @@ object CommandBase : TabExecutor {
         sender: CommandSender,
         cmd: Command,
         label: String,
-        args: Array<out String>
+        args: Array<out String>,
     ): Boolean {
         val subCmd = args.getOrNull(0)
         if (subCmdList.contains(subCmd) && subCmd != "help") {
@@ -118,7 +121,7 @@ object CommandBase : TabExecutor {
                         sender.sendMessage("§c你的牧场数量为0")
                         return false
                     }
-                    val gui = PastureListGui(playerData.pastures)
+                    val gui = PastureListGui(playerData.pastures.toList())
                     sender.openInventory(gui.inventory)
                     true
                 }

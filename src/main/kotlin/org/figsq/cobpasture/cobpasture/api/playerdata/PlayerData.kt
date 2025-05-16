@@ -3,7 +3,7 @@ package org.figsq.cobpasture.cobpasture.api.playerdata
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.figsq.cobpasture.cobpasture.api.Pasture
-import java.util.UUID
+import java.util.*
 
 class PlayerData(
     val uuid: UUID,

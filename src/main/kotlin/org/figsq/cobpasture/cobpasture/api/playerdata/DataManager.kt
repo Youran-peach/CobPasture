@@ -8,11 +8,12 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.world.WorldSaveEvent
 import org.bukkit.scheduler.BukkitTask
 import org.figsq.cobpasture.cobpasture.CobPasture
-import java.util.UUID
+import java.util.*
 
 object DataManager : Listener {
     var unifiedPastureDetector: BukkitTask? = null
     val playerDataCache = mutableMapOf<UUID, PlayerData>()
+
     //可以被替换(用来优化或者实现其他方式存储玩家数据)
     val playerDataManager = PlayerDataManagerImpl
 
@@ -34,8 +35,21 @@ object DataManager : Listener {
         playerDataCache.clear()
         for (player in Bukkit.getOnlinePlayers())
             playerDataCache.put(player.uniqueId, playerDataManager.getPlayerData(player.uniqueId))
-
-        //重启任务 TODO
+        /*重启*/
+        val instance = CobPasture.INSTANCE
+        val config = instance.config
+        val time = config.getLong("pasture-check-time")
+        val makeEggTime = config.getLong("pasture-make-egg-time")
+        unifiedPastureDetector = Bukkit.getScheduler().runTaskTimer(
+            instance, Runnable{
+                playerDataCache.values.flatMap { it.pastures }.forEach {
+                    if (it.needCheck()) {
+                        it.tick += time
+                        if (it.tick < makeEggTime) return@Runnable
+                        it.makeEgg()
+                    }
+                }
+        }, time, time)
     }
 
     @EventHandler

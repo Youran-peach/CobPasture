@@ -12,7 +12,7 @@ object PokemonGsonAdapter : GsonAdapter<Pokemon> {
     override fun serialize(
         src: Pokemon,
         typeOfSrc: Type,
-        context: JsonSerializationContext
+        context: JsonSerializationContext,
     ): JsonElement {
         return src.saveToJSON(RegistryAccess.EMPTY, JsonObject())
     }
@@ -20,7 +20,7 @@ object PokemonGsonAdapter : GsonAdapter<Pokemon> {
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        context: JsonDeserializationContext,
     ): Pokemon {
         return Pokemon.loadFromJSON(RegistryAccess.EMPTY, json.asJsonObject)
     }
