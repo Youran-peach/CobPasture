@@ -7,8 +7,15 @@ import org.bukkit.inventory.Inventory
 import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
 import org.figsq.cobpasture.cobpasture.api.events.PastureMakeEggEvent
 import org.figsq.cobpasture.cobpasture.gui.PastureGui
+import java.util.UUID
 
-class Pasture {
+class Pasture() {
+    constructor(ownerUUID: UUID): this() {
+        this.ownerUUID = ownerUUID
+    }
+
+    var ownerUUID: UUID? = null
+
     var parent1: Pokemon? = null
         set(value) {
             field = value

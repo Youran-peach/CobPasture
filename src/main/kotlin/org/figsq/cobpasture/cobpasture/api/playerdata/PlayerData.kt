@@ -18,6 +18,6 @@ class PlayerData(
     }
 
     fun save() {
-        DataManager.playerDataManager.savePlayerData(this)
+        DataManager.savePlayerData(this)
     }
 }

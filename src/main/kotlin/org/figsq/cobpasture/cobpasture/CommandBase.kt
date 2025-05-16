@@ -116,7 +116,7 @@ object CommandBase : TabExecutor {
                         return false
                     }
 
-                    val playerData = DataManager.playerDataManager.getPlayerData(sender.uniqueId)
+                    val playerData = DataManager.getPlayerData(sender.uniqueId)
                     if (playerData.pastures.isEmpty()) {
                         sender.sendMessage("§c你的牧场数量为0")
                         return false
@@ -134,10 +134,10 @@ object CommandBase : TabExecutor {
                         sender.sendMessage("§c参数错误(玩家名) 不存在或不在线!")
                         return false
                     }
-                    val playerData = DataManager.playerDataManager.getPlayerData(player.uniqueId)
+                    val playerData = DataManager.getPlayerData(player.uniqueId)
                     val max = CobPasture.INSTANCE.config.getInt("player-max-pasture")
                     if (playerData.pastures.size < max) {
-                        playerData.pastures.add(Pasture())
+                        playerData.pastures.add(Pasture(playerData.uuid))
                         playerData.save()
                         sender.sendMessage("§a添加牧场成功")
                         return true

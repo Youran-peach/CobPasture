@@ -4,4 +4,8 @@ player-max-pasture: 10
 #牧场定时检测时长 单位 tick 其实1也消耗不到哪里去 检测时长是用来判断牧场是否需要产出蛋的
 pasture-check-time: 1
 #牧场宝可梦相处多久尝试产出一次? 单位 tick
-pasture-make-egg-time: 24000
+pasture-make-egg-time: 18000
+#孵化检测 检测玩家背包内的蛋并减少时长
+incubation-check-time: 1200
+#孵化时长(临时) 蛋在背包内时每经过上方配置的时长进行一次检测并增加剩余时长同时修改lore显示进度 (背包只检测6个蛋哦~)
+incubation-time: 24000

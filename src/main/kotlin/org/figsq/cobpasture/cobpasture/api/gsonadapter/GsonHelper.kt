@@ -8,5 +8,5 @@ object GsonHelper {
     val GSON = GsonBuilder()
         .registerTypeAdapter(Pokemon::class.java, PokemonGsonAdapter)
         .registerTypeAdapter(PlayerData::class.java, PlayerDataGsonAdapter)
-        .create()
+        .create()!!
 }

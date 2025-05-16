@@ -19,7 +19,7 @@ class PartySelectGui(
     val player = Bukkit.getPlayer(party.playerUUID)!!
     val temp: Map<Int, Pokemon>
 
-    private val inventory = Bukkit.createInventory(null, 54, "Party Select GUI")
+    private val inventory = Bukkit.createInventory(this, 9, "Party Select GUI")
 
     init {
         temp = party.mapIndexed { index, pokemon ->

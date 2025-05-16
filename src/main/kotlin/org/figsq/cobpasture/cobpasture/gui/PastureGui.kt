@@ -4,7 +4,7 @@ import com.cobblemon.mod.common.item.PokemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
-import de.tr7zw.nbtapi.NBT
+import com.cobblemon.mod.common.util.pc
 import me.fullidle.ficore.ficore.common.api.ineventory.ListenerInvHolder
 import me.fullidle.ficore.ficore.common.bukkit.inventory.CraftItemStack
 import org.bukkit.Bukkit
@@ -14,17 +14,36 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import org.figsq.cobpasture.cobpasture.CobPasture
+import org.figsq.cobpasture.cobpasture.api.EggHelper
 import org.figsq.cobpasture.cobpasture.api.Pasture
-import org.figsq.cobpasture.cobpasture.api.gsonadapter.GsonHelper
 
 class PastureGui(
     val pasture: Pasture,
     var previous: Inventory?,
 ) : ListenerInvHolder(), AcceptOptional<PartySelectGui> {
+    companion object {
+        private fun leg(pastureGui: PastureGui, pokemon: Pokemon) {
+            val player = pastureGui.pasture.ownerUUID!!.getPlayer()!!
+            val party = player.party()
+            val pc = player.pc()
+            party[pokemon.uuid]?.let {
+                party.remove(it)
+            } ?: run {
+                pc[pokemon.uuid]?.let {
+                    pc.remove(it)
+                }
+            }
+            pastureGui.pasture.parent2?.let {
+                party.add(it)
+            }
+        }
+    }
+
     enum class OptionalSlot(
         val setSlot: (PastureGui, Pokemon) -> Unit,
     ) {
         PARENT1({ pastureGui, pokemon ->
+            leg(pastureGui, pokemon)
             pastureGui.pasture.parent1 = pokemon
             pastureGui.inventory.setItem(10, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
                 val itemMeta = this.itemMeta!!
@@ -33,8 +52,9 @@ class PastureGui(
             })
         }),
         PARENT2({ pastureGui, pokemon ->
+            leg(pastureGui, pokemon)
             pastureGui.pasture.parent2 = pokemon
-            pastureGui.inventory.setItem(10, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
+            pastureGui.inventory.setItem(16, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
                 val itemMeta = this.itemMeta!!
                 itemMeta.setDisplayName("${pokemon.getDisplayName().string}")
                 itemMeta.lore = listOf("Parent 2")
@@ -74,9 +94,9 @@ class PastureGui(
             this.setItem(start, item)
             start++
             step++
-            if (step == 2) {
+            if (step == 3) {
                 step = 0
-                item = if (item == b) c else b
+                item = if (item == a) b else if (item == b) c else a
             }
         }
 
@@ -91,7 +111,7 @@ class PastureGui(
             val itemStack = ItemStack(Material.CHICKEN_SPAWN_EGG)
             val itemMeta = itemStack.itemMeta!!
             itemMeta.setDisplayName("蛋")
-            itemMeta.lore = listOf("拿在手上走一段路程后孵化")
+            itemMeta.lore = listOf("这个蛋需要很久才能孵化。")
             itemStack.itemMeta = itemMeta
             itemStack
         })
@@ -130,9 +150,10 @@ class PastureGui(
                     )
                     return@onClick
                 }
-                //移除
+                //移除 收回
                 human.uniqueId.getPlayer()!!.party().add(pasture.parent1!!)
                 pasture.parent1 = null
+                this.inventory.setItem(10, null)
                 return@onClick
             }
 
@@ -147,9 +168,10 @@ class PastureGui(
                     )
                     return@onClick
                 }
-                //移除
+                //移除 收回
                 human.uniqueId.getPlayer()!!.party().add(pasture.parent2!!)
                 pasture.parent2 = null
+                this.inventory.setItem(16, null)
                 return@onClick
             }
 
@@ -157,9 +179,11 @@ class PastureGui(
             if (slot == 13) {
                 if (pasture.egg == null) return@onClick
                 val itemStack = ItemStack(Material.CHICKEN_SPAWN_EGG)
-                NBT.modify(itemStack) { nbt ->
-                    nbt.setString("cobpasture", GsonHelper.GSON.toJson(pasture.egg!!))
-                }
+                EggHelper.writePokemonFromEgg(itemStack, pasture.egg!!)
+                val itemMeta = itemStack.itemMeta!!
+                itemMeta.setDisplayName("Poke Egg")
+                itemMeta.lore = listOf("这个蛋需要很久才能孵化。")
+                itemStack.itemMeta = itemMeta
 
                 val eyeLocation = human.eyeLocation
                 val dropItem = eyeLocation.world!!.dropItem(eyeLocation, itemStack)
@@ -167,6 +191,7 @@ class PastureGui(
                 dropItem.isInvulnerable = true
 
                 pasture.egg = null
+                this.inventory.setItem(13, null)
                 return@onClick
             }
         }

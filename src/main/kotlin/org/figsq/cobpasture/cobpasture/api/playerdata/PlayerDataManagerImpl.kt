@@ -14,7 +14,7 @@ object PlayerDataManagerImpl : PlayerDataManager {
         val file = getPlayerDataFile(uuid)
         if (!(file.exists())) return PlayerData(uuid)
         val reader = file.reader()
-        return GsonHelper.GSON.fromJson<PlayerData>(reader, PlayerData::class.java)
+        return GsonHelper.GSON.fromJson(reader, PlayerData::class.java)
             .apply {
                 reader.close()
             }
@@ -22,6 +22,7 @@ object PlayerDataManagerImpl : PlayerDataManager {
 
     override fun savePlayerData(playerData: PlayerData) {
         val file = getPlayerDataFile(playerData.uuid)
+        checkOrCreate(file)
         val writer = file.writer()
         GsonHelper.GSON.toJson(playerData, writer)
         writer.close()
@@ -29,5 +30,12 @@ object PlayerDataManagerImpl : PlayerDataManager {
 
     fun getPlayerDataFile(uuid: UUID): File {
         return File(folder, "$uuid.json")
+    }
+
+    fun checkOrCreate(file: File) {
+        if (!(file.exists())) {
+            file.parentFile.mkdirs()
+            file.createNewFile()
+        }
     }
 }

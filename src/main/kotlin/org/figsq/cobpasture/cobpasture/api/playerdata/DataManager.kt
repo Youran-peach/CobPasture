@@ -10,12 +10,20 @@ import org.bukkit.scheduler.BukkitTask
 import org.figsq.cobpasture.cobpasture.CobPasture
 import java.util.*
 
-object DataManager : Listener {
-    var unifiedPastureDetector: BukkitTask? = null
+object DataManager : Listener, PlayerDataManager {
+    private var unifiedPastureDetector: BukkitTask? = null
     val playerDataCache = mutableMapOf<UUID, PlayerData>()
 
     //可以被替换(用来优化或者实现其他方式存储玩家数据)
-    val playerDataManager = PlayerDataManagerImpl
+    /*不要直接调用这个来获取玩家数据(会导致不读缓存!)*/
+    private var playerDataManager: PlayerDataManager = PlayerDataManagerImpl
+
+    /**
+     * 替换实现
+     */
+    fun setPlayerDataManagerImpl(playerDataManager: PlayerDataManager) {
+        this.playerDataManager = playerDataManager
+    }
 
     init {
         /*<-注册监听器->*/
@@ -41,7 +49,7 @@ object DataManager : Listener {
         val time = config.getLong("pasture-check-time")
         val makeEggTime = config.getLong("pasture-make-egg-time")
         unifiedPastureDetector = Bukkit.getScheduler().runTaskTimer(
-            instance, Runnable{
+            instance, Runnable {
                 playerDataCache.values.flatMap { it.pastures }.forEach {
                     if (it.needCheck()) {
                         it.tick += time
@@ -49,7 +57,8 @@ object DataManager : Listener {
                         it.makeEgg()
                     }
                 }
-        }, time, time)
+            }, time, time
+        )
     }
 
     @EventHandler
@@ -71,5 +80,15 @@ object DataManager : Listener {
         if (Bukkit.getWorlds()[0] != event.world) return
         playerDataCache.values.forEach { it.save() }
         //TODO 或许以后可以搞个提示~
+    }
+
+    override fun getPlayerData(uuid: UUID): PlayerData {
+        return playerDataCache.getOrPut(uuid) {
+            playerDataManager.getPlayerData(uuid)
+        }
+    }
+
+    override fun savePlayerData(playerData: PlayerData) {
+        playerDataManager.savePlayerData(playerData)
     }
 }
