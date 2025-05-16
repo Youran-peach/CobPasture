@@ -28,6 +28,11 @@ repositories {
         name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
+
+    maven {
+        name = "CodeMC"
+        url = uri("https://repo.codemc.io/repository/maven-public/")
+    }
 }
 
 dependencies {
@@ -41,6 +46,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
     /*<-spigot plugin depend->*/
     compileOnly 'me.fullidle.ficore.ficore:FICore:1.2.9'
+    compileOnly("de.tr7zw:item-nbt-api-plugin:2.15.0")
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
