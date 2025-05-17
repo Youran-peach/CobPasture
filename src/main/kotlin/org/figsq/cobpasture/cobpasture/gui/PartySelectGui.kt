@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.PlayerInventory
 import org.figsq.cobpasture.cobpasture.CobPasture
+import org.figsq.cobpasture.cobpasture.api.events.SelectPokemonEvent
 
 class PartySelectGui(
     party: PlayerPartyStore,
@@ -38,6 +39,12 @@ class PartySelectGui(
             val human = e.whoClicked
             val slot = e.slot
             temp[slot]?.let {
+                val event = SelectPokemonEvent(
+                    player, it, this
+                )
+                Bukkit.getPluginManager().callEvent(event)
+                if (event.isCancelled) return@onClick
+
                 pokemon = it
                 human.closeInventory()
             }
