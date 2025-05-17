@@ -1,0 +1,6 @@
+group = 'org.figsq.cobpasture.cobpasturelimit.CobPastureLimit'
+version = '1.0-SNAPSHOT'
+
+dependencies {
+    compileOnly(rootProject)
+}

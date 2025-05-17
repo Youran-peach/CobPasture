@@ -35,10 +35,8 @@ class CobPasture : JavaPlugin() {
         val console = Bukkit.getConsoleSender()
         console.sendMessage(*LOGO)
 
-        /*
-        //付费下载的时候构建构建这个的
-        console.sendMessage("§a哦~插件启动了奥~(哦？你付费买的，为什么不自己构建一个呢，代码开源的~(其实我不想知道为什么))你的钱钱呢~我就勉为其难的收下了呢~")
-        * */
+        //付费下载的时候构建构建这个的 不想要有自己删了构建去
+        console.sendMessage("§a(哦？你付费买的，为什么不自己构建一个呢，代码开源的~(其实我不想知道为什么))你的钱钱呢~我就勉为其难的收下了呢~")
         console.sendMessage("§a哦~插件启动了奥~")
     }
 

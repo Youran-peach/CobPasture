@@ -13,3 +13,7 @@ permissions:
     default: op
   cobpasture.cmd.makeegg:
     default: op
+  cobpasture.cmd.open:
+    default: true
+  cobpasture.cmd.add:
+    default: op

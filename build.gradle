@@ -1,66 +1,68 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '2.0.20'
-    id 'architectury-plugin' version '3.4-SNAPSHOT'
-    id 'dev.architectury.loom' version '1.7-SNAPSHOT'
-}
-
-architectury {
-    minecraft = '1.21.1'
+    id 'org.jetbrains.kotlin.jvm' version '2.0.20' apply(false)
+    id 'architectury-plugin' version '3.4-SNAPSHOT' apply(false)
+    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply(false)
 }
 
 group = 'org.figsq.cobpasture.cobpasture.CobPasture'
 version = '1.0-SNAPSHOT'
 
-repositories {
-    mavenLocal()
-    mavenCentral()
+allprojects {
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'dev.architectury.loom'
 
-    maven {
-        allowInsecureProtocol = true
-        url "http://server.pokemtd.top:31647/snapshots"
+    architectury {
+        minecraft = '1.21.1'
     }
+    repositories {
+        mavenLocal()
+        mavenCentral()
 
-    maven {
-        url = 'https://maven.impactdev.net/repository/development/'
+        maven {
+            allowInsecureProtocol = true
+            url "http://server.pokemtd.top:31647/snapshots"
+        }
+
+        maven {
+            url = 'https://maven.impactdev.net/repository/development/'
+        }
+
+        maven {
+            name = 'spigotmc-repo'
+            url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        }
+
+        maven {
+            name = "CodeMC"
+            url = uri("https://repo.codemc.io/repository/maven-public/")
+        }
     }
+    dependencies {
+        /*<-minecraft->*/
+        minecraft "com.mojang:minecraft:1.21.1"
+        mappings loom.officialMojangMappings()
+        /*<-cobblemon->*/
+        modCompileOnly("com.cobblemon:mod:1.6.1+1.21.1")
 
-    maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        /*<-spigot->*/
+        compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+        /*<-spigot plugin depend->*/
+        compileOnly 'me.fullidle.ficore.ficore:FICore:1.2.9'
+        compileOnly("de.tr7zw:item-nbt-api-plugin:2.15.0")
+
+        testImplementation 'org.jetbrains.kotlin:kotlin-test'
     }
-
-    maven {
-        name = "CodeMC"
-        url = uri("https://repo.codemc.io/repository/maven-public/")
+    processResources {
+        filteringCharset 'UTF-8'
+        filesMatching('plugin.yml') {
+            expand project.properties
+        }
     }
-}
-
-dependencies {
-    /*<-minecraft->*/
-    minecraft "com.mojang:minecraft:1.21.1"
-    mappings loom.officialMojangMappings()
-    /*<-cobblemon->*/
-    modCompileOnly("com.cobblemon:mod:1.6.1+1.21.1")
-
-    /*<-spigot->*/
-    compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
-    /*<-spigot plugin depend->*/
-    compileOnly 'me.fullidle.ficore.ficore:FICore:1.2.9'
-    compileOnly("de.tr7zw:item-nbt-api-plugin:2.15.0")
-
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
-}
-
-processResources {
-    filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
-        expand project.properties
+    test {
+        useJUnitPlatform()
     }
-}
-
-test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(17)
+    kotlin {
+        jvmToolchain(17)
+    }
 }
