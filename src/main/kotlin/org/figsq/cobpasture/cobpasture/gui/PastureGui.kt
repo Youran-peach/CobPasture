@@ -16,6 +16,7 @@ import org.bukkit.inventory.PlayerInventory
 import org.figsq.cobpasture.cobpasture.CobPasture
 import org.figsq.cobpasture.cobpasture.api.EggHelper
 import org.figsq.cobpasture.cobpasture.api.Pasture
+import org.figsq.cobpasture.cobpasture.api.events.TakeItEggEvent
 
 class PastureGui(
     val pasture: Pasture,
@@ -179,11 +180,17 @@ class PastureGui(
             if (slot == 13) {
                 if (pasture.egg == null) return@onClick
                 val itemStack = ItemStack(Material.CHICKEN_SPAWN_EGG)
-                EggHelper.writePokemonFromEgg(itemStack, pasture.egg!!)
                 val itemMeta = itemStack.itemMeta!!
                 itemMeta.setDisplayName("Poke Egg")
                 itemMeta.lore = listOf("这个蛋需要很久才能孵化。")
                 itemStack.itemMeta = itemMeta
+
+                val event = TakeItEggEvent(pasture, pasture.egg!!, itemStack)
+                Bukkit.getPluginManager().callEvent(event)
+                if (event.isCancelled) return@onClick
+
+                /*写入数据*/
+                EggHelper.writePokemonFromEgg(itemStack, pasture.egg!!)
 
                 val eyeLocation = human.eyeLocation
                 val dropItem = eyeLocation.world!!.dropItem(eyeLocation, itemStack)
