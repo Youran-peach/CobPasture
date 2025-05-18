@@ -100,7 +100,9 @@ object ListenerBase : Listener {
         val eggTime = EggHelper.getEggTime(item)
         if (eggTime >= CobPasture.INSTANCE.config.getLong("incubation-time")) {
             item.amount = 0
-            event.player.uniqueId.getPlayer()!!.party().add(egg)
+            val uniqueId = event.player.uniqueId
+            egg.setOriginalTrainer(uniqueId)
+            uniqueId.getPlayer()!!.party().add(egg)
             event.player.sendMessage("§a孵化成功!")
         }
         return true
