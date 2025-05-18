@@ -21,6 +21,11 @@ object CommandBase : TabExecutor {
     )
     val helpMsg = arrayOf(
         "§a帮助信息",
+        "§a/cobpasture help 查看帮助",
+        "§a/cobpasture reload 重载配置",
+        "§a/cobpasture makeegg <parent1Slot> <parent2Slot> 玩家背包两个精灵产出蛋",
+        "§a/cobpasture open 玩家打开牧场列表gui",
+        "§a/cobpasture add <player> 给玩家增加牧场(被代理掉后会被无效)"
     )
 
     override fun onTabComplete(
