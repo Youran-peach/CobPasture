@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.world.WorldSaveEvent
 import org.bukkit.scheduler.BukkitTask
 import org.figsq.cobpasture.cobpasture.CobPasture
+import org.figsq.cobpasture.cobpasture.api.events.PlayerDataGetEvent
 import java.util.*
 
 object DataManager : Listener, PlayerDataManager {
@@ -41,8 +42,10 @@ object DataManager : Listener, PlayerDataManager {
         /*<-缓存处理->*/
         playerDataCache.values.forEach { it.save() }
         playerDataCache.clear()
-        for (player in Bukkit.getOnlinePlayers())
-            playerDataCache.put(player.uniqueId, playerDataManager.getPlayerData(player.uniqueId))
+        for (player in Bukkit.getOnlinePlayers()) {
+            /*在线玩家的缓存重加载*/
+            this.getPlayerData(player.uniqueId)
+        }
         /*重启*/
         val instance = CobPasture.INSTANCE
         val config = instance.config
@@ -85,6 +88,8 @@ object DataManager : Listener, PlayerDataManager {
     override fun getPlayerData(uuid: UUID): PlayerData {
         return playerDataCache.getOrPut(uuid) {
             playerDataManager.getPlayerData(uuid)
+        }.apply {
+            Bukkit.getServer().pluginManager.callEvent(PlayerDataGetEvent(this))
         }
     }
 

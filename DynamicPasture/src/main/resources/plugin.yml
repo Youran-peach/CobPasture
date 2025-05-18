@@ -1,0 +1,9 @@
+name: DynamicPasture
+main: ${group}
+version: ${version}
+api-version: 1.21
+depend:
+  - CobPasture
+commands:
+  dynamicpasture:
+    description: desc
