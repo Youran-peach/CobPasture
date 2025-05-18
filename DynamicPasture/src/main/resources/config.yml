@@ -1,0 +1,16 @@
+#由于cobpasture现在还不能超过54个牧场，所以最大值只能限制在54了!
+permissions:
+  -
+    #自定义一个默认权限，方便普通玩家是否拥有至少多少个的牧场
+    permission: dynamicpasture.default
+    quantity: 1
+  -
+    permission: dynamicpasture.vip1
+    quantity: 10
+  -
+    permission: custom.vip2
+    quantity: 20
+
+#比如玩家在有vip1权限的时候也就是10牧场的时候，权限下掉了，在玩家下次打开牧场列表界面的时候会将失去的牧场内精灵退还给玩家
+#并提示这条提示!
+check-the-return-prompt: '§c你失去了某些权限，权限带来的牧场增加被撤销，牧场内所有宝可梦均返还!'
