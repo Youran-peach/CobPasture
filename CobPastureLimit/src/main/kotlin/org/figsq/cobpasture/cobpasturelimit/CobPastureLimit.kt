@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
+import org.figsq.cobpasture.cobpasturelimit.config.SelectLimit
 
 class CobPastureLimit : JavaPlugin() {
     companion object {
@@ -21,13 +22,12 @@ class CobPastureLimit : JavaPlugin() {
         pluginManager.registerEvents(ListenerBase, this)
 
         getCommand("cobpasturelimit")?.setExecutor(this)
-
-        println("插件已加载!")
     }
 
     override fun reloadConfig() {
         this.saveDefaultConfig()
         super.reloadConfig()
+        SelectLimit.load()
     }
 
 

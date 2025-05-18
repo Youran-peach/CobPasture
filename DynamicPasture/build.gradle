@@ -1,0 +1,6 @@
+group = 'org.figsq.cobpasture.dynamicpasture.DynamicPasture'
+version = '1.0-SNAPSHOT'
+
+dependencies {
+    compileOnly(rootProject)
+}

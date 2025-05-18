@@ -13,3 +13,4 @@ rootProject.name = 'CobPasture'
 
 
 include 'CobPastureLimit'
+include 'DynamicPasture'

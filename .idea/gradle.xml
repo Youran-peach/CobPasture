@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/CobPastureLimit" />
+            <option value="$PROJECT_DIR$/DynamicPasture" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="true" />

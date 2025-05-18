@@ -1,0 +1,16 @@
+#选择限制
+select-limit:
+  #限制初始训练家
+  original-trainer:
+    enable: true
+    #有些精灵是没有初始训练家的 这个选项是用来返回没有初始训练家或其他情况直接返回该项结果
+    default: true
+  #限制宝可梦 中文名需要自己去汉化模组
+  pokemons:
+    - 'ditto'
+  #亲密度要求 亲密度 < 配置值 则不可以选择
+  friendship: 0
+  #等级要求 等级 < 配置值 则不可以选择
+  level: 0
+  #选择不了时提示的信息
+  tips: '§c该精灵被限制选择!'
