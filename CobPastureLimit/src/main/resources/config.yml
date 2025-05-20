@@ -14,3 +14,7 @@ select-limit:
   level: 0
   #选择不了时提示的信息
   tips: '§c该精灵被限制选择!'
+#产出限制
+make-egg-limit:
+  #即刻打上初始训练家信息
+  instant-tag-original-trainer: true

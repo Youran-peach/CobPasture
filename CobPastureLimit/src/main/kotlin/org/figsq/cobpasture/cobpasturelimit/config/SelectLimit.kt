@@ -28,7 +28,7 @@ object SelectLimit {
         return (ORIGINAL_TRAINER_ENABLE && pokemon.originalTrainer?.let {
             if (pokemon.originalTrainerType == OriginalTrainerType.PLAYER) UUID.fromString(
                 pokemon.originalTrainer
-            ) == pokemon.getOwnerUUID() else null
+            ) != pokemon.getOwnerUUID() else null
         } ?: ORIGINAL_TRAINER_DEFAULT) ||
                 (pokemons.contains(pokemon.species.name) || pokemons.contains(pokemon.getDisplayName().string)) ||
                 pokemon.friendship < friendship

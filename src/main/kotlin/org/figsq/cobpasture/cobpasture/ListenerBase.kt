@@ -101,7 +101,7 @@ object ListenerBase : Listener {
         if (eggTime >= CobPasture.INSTANCE.config.getLong("incubation-time")) {
             item.amount = 0
             val uniqueId = event.player.uniqueId
-            egg.setOriginalTrainer(uniqueId)
+            if (egg.originalTrainer == null) egg.setOriginalTrainer(uniqueId)
             uniqueId.getPlayer()!!.party().add(egg)
             event.player.sendMessage("§a孵化成功!")
         }

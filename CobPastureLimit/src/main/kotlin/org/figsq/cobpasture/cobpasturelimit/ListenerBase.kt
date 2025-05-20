@@ -15,8 +15,14 @@ object ListenerBase : Listener {
         }
     }
 
-    /*@EventHandler
+    @EventHandler
     fun makeEgg(event: PastureMakeEggEvent) {
-        TODO()
-    }*/
+        //即刻初始训练家标签
+        val owner = event.pasture.ownerUUID ?: return
+        if (CobPastureLimit.INSTANCE.config.getBoolean("make-egg-limit.instant-tag-original-trainer")) {
+            event.egg?.setOriginalTrainer(owner)?.let {
+                CobPastureLimit.INSTANCE.logger.info("Instant tag original trainer: $owner")
+            }
+        }
+    }
 }
