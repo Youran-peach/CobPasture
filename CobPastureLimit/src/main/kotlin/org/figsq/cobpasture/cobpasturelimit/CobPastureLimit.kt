@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
+import org.figsq.cobpasture.cobpasturelimit.config.MakeEggLimit
 import org.figsq.cobpasture.cobpasturelimit.config.SelectLimit
 
 class CobPastureLimit : JavaPlugin() {
@@ -28,6 +29,7 @@ class CobPastureLimit : JavaPlugin() {
         this.saveDefaultConfig()
         super.reloadConfig()
         SelectLimit.load()
+        MakeEggLimit.load()
     }
 
 

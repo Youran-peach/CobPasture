@@ -2,7 +2,7 @@ package org.figsq.cobpasture.cobpasturelimit.config
 
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
-import org.figsq.cobpasture.cobpasture.CobPasture
+import org.bukkit.permissions.Permissible
 import org.figsq.cobpasture.cobpasturelimit.CobPastureLimit
 import java.util.*
 
@@ -24,13 +24,28 @@ object SelectLimit {
         tips = config.getString("select-limit.tips")!!
     }
 
-    fun isLimit(pokemon: Pokemon): Boolean {
-        return (ORIGINAL_TRAINER_ENABLE && pokemon.originalTrainer?.let {
+    const val PERMISSION_START = "cobpasturelimit.notcheck.selectlimit"
+
+    fun isLimit(permissible: Permissible, pokemon: Pokemon): Boolean {
+
+        return (!(permissible.hasPermission("$PERMISSION_START.originaltrainer")) &&
+                ORIGINAL_TRAINER_ENABLE && pokemon.originalTrainer?.let {
             if (pokemon.originalTrainerType == OriginalTrainerType.PLAYER) UUID.fromString(
                 pokemon.originalTrainer
-            ) != pokemon.getOwnerUUID() else null
-        } ?: ORIGINAL_TRAINER_DEFAULT) ||
-                (pokemons.contains(pokemon.species.name) || pokemons.contains(pokemon.getDisplayName().string)) ||
-                pokemon.friendship < friendship
+            ) != pokemon.getOwnerUUID()
+            else null
+        } ?: ORIGINAL_TRAINER_DEFAULT)
+                ||
+                //pokemons
+                (
+                        !permissible.hasPermission("$PERMISSION_START.pokemons.${pokemon.species.name.lowercase()}") &&
+                                (pokemons.contains(pokemon.species.name) ||
+                                        pokemons.contains(pokemon.getDisplayName().string)))
+                ||
+                //friendship
+                (
+                        !(permissible.hasPermission("$PERMISSION_START.friendship")) &&
+                                pokemon.friendship < friendship
+                        )
     }
 }
