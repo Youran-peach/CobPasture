@@ -38,7 +38,7 @@ object SelectLimit {
                 ||
                 //pokemons
                 (
-                        !permissible.hasPermission("$PERMISSION_START.pokemons.${pokemon.species.name.lowercase()}") &&
+                        !permissible.hasPermission("$PERMISSION_START.pokemons.${pokemon.species.name}") &&
                                 (pokemons.contains(pokemon.species.name) ||
                                         pokemons.contains(pokemon.getDisplayName().string)))
                 ||
