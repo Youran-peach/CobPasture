@@ -73,9 +73,10 @@ object DataManager : Listener, PlayerDataManager {
 
     @EventHandler
     fun quit(event: PlayerQuitEvent) {
-        event.player.uniqueId.let {
-            playerDataCache.remove(it)?.save()
-        }
+        if (CobPasture.INSTANCE.config.getBoolean("offline-support"))
+            event.player.uniqueId.let {
+                playerDataCache.remove(it)?.save()
+            }
     }
 
     @EventHandler
