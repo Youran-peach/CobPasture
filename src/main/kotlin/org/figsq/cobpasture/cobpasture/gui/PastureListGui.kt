@@ -11,14 +11,24 @@ import org.figsq.cobpasture.cobpasture.api.Pasture
 class PastureListGui(
     val pastures: List<Pasture>,
 ) : ListenerInvHolder() {
+    private val temp = mutableMapOf<Int, Pasture>()
 
-    private val inventory = Bukkit.createInventory(this, 54, "Pasture List GUI").apply {
+    private val inventory = Bukkit.createInventory(this, 54, GuiConfig.PASTURE_LIST_GUI_TITLE).apply {
         val itemStack = ItemStack(Material.getMaterial("COBBLEMON_PASTURE")!!)
         val itemMeta = itemStack.itemMeta!!
         for ((index, pasture) in pastures.withIndex()) {
-            itemMeta.setDisplayName("Pasture<-${index}->")
+            itemMeta.setDisplayName(
+                GuiConfig.PASTURE_LIST_GUI_ELEMENTS_NAME
+                    .replace("{pasture_id}", index.toString())
+            )
+            itemMeta.lore = GuiConfig.PASTURE_LIST_GUI_ELEMENTS_LORE.map {
+                it.replace("{pasture_id}", index.toString())
+                    .replace("{pasture_tick}", "${pasture.tick}")
+                    .replace("{pasture_progress}", pasture.progress())
+            }
             itemStack.itemMeta = itemMeta
-            this.addItem(itemStack)
+            this.setItem(index, itemStack)
+            temp[index] = pasture
         }
     }
 
@@ -27,12 +37,9 @@ class PastureListGui(
             e.isCancelled = true
             if (e.clickedInventory is PlayerInventory) return@onClick
             if (e.currentItem == null) return@onClick
-            val displayName = e.currentItem?.itemMeta?.displayName ?: return@onClick
-            if (!(displayName.contains("Pasture"))) return@onClick
-            val index = displayName.substring(9).let {
-                it.substring(0, it.length - 2)
-            }.toInt()
-            e.whoClicked.openInventory(PastureGui(this.pastures[index], this.inventory).inventory)
+            val pasture = temp[e.slot]
+            if (pasture == null) return@onClick
+            e.whoClicked.openInventory(PastureGui(pasture, this.inventory).inventory)
         }
     }
 

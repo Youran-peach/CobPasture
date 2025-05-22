@@ -48,8 +48,9 @@ class PastureGui(
             pastureGui.pasture.parent1 = pokemon
             pastureGui.inventory.setItem(10, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
                 val itemMeta = this.itemMeta!!
-                itemMeta.setDisplayName("${pokemon.getDisplayName().string}")
-                itemMeta.lore = listOf("Parent 1")
+                itemMeta.setDisplayName(GuiConfig.PASTURE_GUI_PARENT1_NAME)
+                itemMeta.lore = GuiConfig.PASTURE_GUI_PARENT1_LORE
+                this.itemMeta = itemMeta
             })
         }),
         PARENT2({ pastureGui, pokemon ->
@@ -57,8 +58,9 @@ class PastureGui(
             pastureGui.pasture.parent2 = pokemon
             pastureGui.inventory.setItem(16, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
                 val itemMeta = this.itemMeta!!
-                itemMeta.setDisplayName("${pokemon.getDisplayName().string}")
-                itemMeta.lore = listOf("Parent 2")
+                itemMeta.setDisplayName(GuiConfig.PASTURE_GUI_PARENT2_NAME)
+                itemMeta.lore = GuiConfig.PASTURE_GUI_PARENT2_LORE
+                this.itemMeta = itemMeta
             })
         });
 
@@ -67,7 +69,7 @@ class PastureGui(
         }
     }
 
-    private val inventory = Bukkit.createInventory(this, 27, "Pasture Gui").apply {
+    private val inventory = Bukkit.createInventory(this, 27, GuiConfig.PASTURE_GUI_TITLE).apply {
         /*
         "aaabbbccc"
         "a#ab$bc%c"
@@ -104,23 +106,35 @@ class PastureGui(
         this.setItem(10, pasture.parent1?.let {
             CraftItemStack.asBukkitCopy(PokemonItem.from(it)).apply {
                 val itemMeta = this.itemMeta!!
-                itemMeta.setDisplayName("${it.getDisplayName().string}")
-                itemMeta.lore = listOf("Parent 1")
+                itemMeta.setDisplayName(
+                    GuiConfig.PASTURE_GUI_PARENT1_NAME
+                        .replace("{pokemon_name}", it.getDisplayName().string)
+                )
+                itemMeta.lore = GuiConfig.PASTURE_GUI_PARENT1_LORE.map { str ->
+                    str.replace("{pokemon_name}", it.getDisplayName().string)
+                }
+                this.itemMeta = itemMeta
             }
         })
         this.setItem(13, pasture.egg?.let {
             val itemStack = ItemStack(Material.CHICKEN_SPAWN_EGG)
             val itemMeta = itemStack.itemMeta!!
-            itemMeta.setDisplayName("蛋")
-            itemMeta.lore = listOf("这个蛋需要很久才能孵化。")
+            itemMeta.setDisplayName(GuiConfig.PASTURE_GUI_EGG_NAME)
+            itemMeta.lore = GuiConfig.PASTURE_GUI_EGG_LORE
             itemStack.itemMeta = itemMeta
             itemStack
         })
         this.setItem(16, pasture.parent2?.let {
             CraftItemStack.asBukkitCopy(PokemonItem.from(it)).apply {
                 val itemMeta = this.itemMeta!!
-                itemMeta.setDisplayName("${it.getDisplayName().string}")
-                itemMeta.lore = listOf("Parent 2")
+                itemMeta.setDisplayName(
+                    GuiConfig.PASTURE_GUI_PARENT2_NAME
+                        .replace("{pokemon_name}", it.getDisplayName().string)
+                )
+                itemMeta.lore = GuiConfig.PASTURE_GUI_PARENT2_LORE.map { str ->
+                    str.replace("{pokemon_name}", it.getDisplayName().string)
+                }
+                this.itemMeta = itemMeta
             }
         })
     }
@@ -181,8 +195,8 @@ class PastureGui(
                 if (pasture.egg == null) return@onClick
                 val itemStack = ItemStack(Material.CHICKEN_SPAWN_EGG)
                 val itemMeta = itemStack.itemMeta!!
-                itemMeta.setDisplayName("Poke Egg")
-                itemMeta.lore = listOf("这个蛋需要很久才能孵化。")
+                itemMeta.setDisplayName(GuiConfig.PASTURE_GUI_EGG_NAME)
+                itemMeta.lore = GuiConfig.PASTURE_GUI_EGG_LORE
                 itemStack.itemMeta = itemMeta
 
                 val event = TakeItEggEvent(pasture, pasture.egg!!, itemStack)

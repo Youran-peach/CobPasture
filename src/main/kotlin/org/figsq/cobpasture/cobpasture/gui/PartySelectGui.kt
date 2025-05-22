@@ -20,14 +20,19 @@ class PartySelectGui(
     val player = Bukkit.getPlayer(party.playerUUID)!!
     val temp: Map<Int, Pokemon>
 
-    private val inventory = Bukkit.createInventory(this, 9, "Party Select GUI")
+    private val inventory = Bukkit.createInventory(this, 9, GuiConfig.PARTY_SELECT_GUI_TITLE)
 
     init {
         temp = party.mapIndexed { index, pokemon ->
             inventory.setItem(index, CraftItemStack.asBukkitCopy(PokemonItem.from(pokemon)).apply {
                 val meta = this.itemMeta!!
-                meta.setDisplayName(pokemon.getDisplayName().string)
-                meta.lore = listOf("点击选择")
+                meta.setDisplayName(
+                    GuiConfig.PARTY_SELECT_GUI_ELEMENTS_NAME
+                        .replace("{pokemon_name}", pokemon.getDisplayName().string)
+                )
+                meta.lore = GuiConfig.PARTY_SELECT_GUI_ELEMENTS_LORE.map {
+                    it.replace("{pokemon_name}", pokemon.getDisplayName().string)
+                }
                 this.itemMeta = meta
             })
             index to pokemon

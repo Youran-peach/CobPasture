@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
+import org.figsq.cobpasture.cobpasture.CobPasture
 import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
 import org.figsq.cobpasture.cobpasture.api.events.PastureMakeEggEvent
 import org.figsq.cobpasture.cobpasture.gui.PastureGui
@@ -86,6 +87,13 @@ class Pasture() {
      */
     fun open(player: Player, previous: Inventory?) {
         player.openInventory(PastureGui(this, previous).inventory)
+    }
+
+    /**
+     * 格式化百分比进度字符串
+     */
+    fun progress(): String {
+        return String.format("%.2f",this.tick.toDouble() / CobPasture.INSTANCE.config.getLong("pasture-make-egg-time") * 100.0)
     }
 
     //没有打算写tick方法 所有检测都是在 DataManager.unifiedPastureDetector 中完成

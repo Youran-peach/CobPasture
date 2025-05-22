@@ -14,3 +14,33 @@ incubation-time: 24000
 #有缓存期间，牧场还能继续工作，但如果服务器启动后，玩家没有进入过服务器，缓存则不存在。
 #玩家的牧场也就不会工作，这样可以让忘记至少会启动游戏，而不是直接甩给服务器等牧场
 offline-support: true
+#gui配置
+gui:
+  party-select-gui:
+    title: '§3请选择宝可梦'
+    elements:
+      name: '§3{pokemon_name}'
+      lore:
+        - '§3点击选择'
+  pasture-gui:
+    title: '§3牧场 {pasture_id}'
+    parent1:
+      name: '§3{pokemon_name}'
+      lore:
+        - '§3点击更换'
+    parent2:
+      name: '§3{pokemon_name}'
+      lore:
+        - '§3点击更换'
+    egg:
+      name: '§3蛋'
+      lore:
+        - '§3这个蛋需要很久才能孵化。'
+        - '§3点击取出'
+  pasture-list-gui:
+    title: '§3牧场列表'
+    elements:
+      name: '§3牧场 {pasture_id}'
+      lore:
+        - '§3当前tick: §r{pasture_tick} §7(低于0则为无法繁殖!)'
+        - '§3进度: §a{pasture_progress} %'

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
 import org.figsq.cobpasture.cobpasture.api.playerdata.DataManager
+import org.figsq.cobpasture.cobpasture.gui.GuiConfig
 
 class CobPasture : JavaPlugin() {
     companion object {
@@ -43,6 +44,7 @@ class CobPasture : JavaPlugin() {
     override fun reloadConfig() {
         this.saveDefaultConfig()
         super.reloadConfig()
+        GuiConfig.load()
         BreedLogicManager.load()
         DataManager.load()
         ListenerBase.load()
