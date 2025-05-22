@@ -9,20 +9,19 @@ import org.figsq.cobpasture.cobpasture.gui.GuiConfig
 class CobPasture : JavaPlugin() {
     companion object {
         lateinit var INSTANCE: CobPasture
+        val LOGO = arrayOf(
+            "",
+            "§3  _____     __   §7___           §8__              ",
+            "§3 / ___/__  / /  §7/ _ \\___ ____ §8/ /___ _________ ",
+            "§3/ /__/ _ \\/ _ \\§7/ ___/ _ `(_-<§8/ __/ // / __/ -_)",
+            "§3\\___/\\___/_.__§7/_/   \\_,_/___/§8\\__/\\_,_/_/  \\__/ ",
+            ""
+        )
     }
 
     override fun onLoad() {
         INSTANCE = this
     }
-
-    val LOGO = arrayOf(
-        "",
-        "§3  _____     __   §7___           §8__              ",
-        "§3 / ___/__  / /  §7/ _ \\___ ____ §8/ /___ _________ ",
-        "§3/ /__/ _ \\/ _ \\§7/ ___/ _ `(_-<§8/ __/ // / __/ -_)",
-        "§3\\___/\\___/_.__§7/_/   \\_,_/___/§8\\__/\\_,_/_/  \\__/ ",
-        ""
-    )
 
     override fun onEnable() {
         this.reloadConfig()
