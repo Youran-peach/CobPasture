@@ -53,11 +53,11 @@ object DataManager : Listener, PlayerDataManager {
         val makeEggTime = config.getLong("pasture-make-egg-time")
         unifiedPastureDetector = Bukkit.getScheduler().runTaskTimer(
             instance, Runnable {
-                playerDataCache.values.flatMap { it.pastures }.forEach {
-                    if (it.needCheck()) {
-                        it.tick += time
-                        if (it.tick < makeEggTime) return@Runnable
-                        it.makeEgg()
+                for (pasture in playerDataCache.values.flatMap { it.pastures }) {
+                    if (pasture.needCheck()) {
+                        pasture.tick += time
+                        if (pasture.tick < makeEggTime) continue
+                        pasture.makeEgg()
                     }
                 }
             }, time, time
