@@ -34,9 +34,6 @@ class PastureGui(
                     pc.remove(it)
                 }
             }
-            pastureGui.pasture.parent2?.let {
-                party.add(it)
-            }
         }
     }
 
