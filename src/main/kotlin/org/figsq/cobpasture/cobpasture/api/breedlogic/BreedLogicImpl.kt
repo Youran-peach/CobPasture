@@ -46,7 +46,9 @@ object BreedLogicImpl : BreedLogic {
 
     private fun geneticData(parent1: Pokemon, parent2: Pokemon, egg: Pokemon) {
         //TODO 遗传数据为实现
+/*
         CobPasture.INSTANCE.logger.warning("遗传数据为实现!(只是提示不用在意(并没有关闭提示的方法~))")
+*/
     }
 
     private fun selectSpecies(parent1: Pokemon, parent2: Pokemon): Species {
