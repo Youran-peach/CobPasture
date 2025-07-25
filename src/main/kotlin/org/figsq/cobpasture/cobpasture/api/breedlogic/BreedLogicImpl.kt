@@ -6,14 +6,16 @@ import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
-import org.figsq.cobpasture.cobpasture.CobPasture
+import org.figsq.cobpasture.cobpasture.api.breedlogic.SpeciesData.DITTO
+import org.figsq.cobpasture.cobpasture.api.breedlogic.SpeciesData.NIDORAN_F
+import org.figsq.cobpasture.cobpasture.api.breedlogic.SpeciesData.NIDORAN_M
 import kotlin.random.Random
 
 object BreedLogicImpl : BreedLogic {
     override fun canBreed(parent1: Pokemon, parent2: Pokemon): Boolean {
         if (parent1 === parent2) return false
-        val isDitto1 = parent1.species.name == "ditto"
-        val isDitto2 = parent2.species.name == "ditto"
+        val isDitto1 = parent1.species == DITTO
+        val isDitto2 = parent2.species == DITTO
         if (!isDitto1 && !isDitto2) {
             //都不是百变怪的情况下
             if (parent1.gender == parent2.gender) return false
@@ -45,21 +47,20 @@ object BreedLogicImpl : BreedLogic {
     }
 
     private fun geneticData(parent1: Pokemon, parent2: Pokemon, egg: Pokemon) {
-        //TODO 遗传数据为实现
-/*
-        CobPasture.INSTANCE.logger.warning("遗传数据为实现!(只是提示不用在意(并没有关闭提示的方法~))")
-*/
+        //遗传
+        BreedLogicManager.geneticHandlers.forEach { it.handle(parent1, parent2, egg) }
     }
 
     private fun selectSpecies(parent1: Pokemon, parent2: Pokemon): Species {
         val secondary = if (
-            parent1.species.name != "ditto" && (parent2.species.name != "ditto" || parent2.gender == Gender.MALE)
+            parent1.species == DITTO && (parent2.species != DITTO || parent2.gender == Gender.MALE)
         ) parent1 to parent2 else parent2 to parent1
 
         val lowestForm = lowestForm(secondary.first.form)
         //规则 若生蛋的母方是尼多兰或者亲代是尼多朗或其进化形和百变怪*，子代由性别*决定是尼多兰还是尼多朗
-        if (lowestForm.species.name.startsWith("Nidoran"))
-            return PokemonSpecies.getByName("nidoran${if (Random.nextBoolean()) "m" else "f"}")!!
+        if (lowestForm.species.name.startsWith("nidoran",false)) {
+            return if (Random.nextBoolean()) NIDORAN_F else NIDORAN_M
+        }
         //规则 若生蛋的母方是甜甜萤或者亲代是电萤虫和百变怪*，子代由性别*决定是电萤虫还是甜甜萤。
         if (lowestForm.species.name in setOf("Illumise", "Volbeat"))
             return PokemonSpecies.getByName(if (Random.nextBoolean()) "illumise" else "volbeat")!!
@@ -69,16 +70,13 @@ object BreedLogicImpl : BreedLogic {
         if (secondary.first.species.name == "Ursaluna" && secondary.first.form.name == "Bloodmoon") return PokemonSpecies.getByName(
             "teddiursa"
         )!!
-        //规则 熏香 TODO 没写 朱紫 的 无视熏香
-        CobPasture.INSTANCE.logger.warning("熏香逻辑未实现!(只是提示不用在意(并没有关闭提示的方法~))")
-
-        return lowestForm(secondary.first.form).species
+        return BreedLogicManager.incenseHandler.handle(parent1, parent2) ?: lowestForm(secondary.first.form).species
     }
 
     /**
      * @return 宝可梦进化链最低的形态
      */
-    private fun lowestForm(form: FormData): FormData {
+    fun lowestForm(form: FormData): FormData {
         return form.species.preEvolution?.let { lowestForm(it.form) } ?: form
     }
 }
