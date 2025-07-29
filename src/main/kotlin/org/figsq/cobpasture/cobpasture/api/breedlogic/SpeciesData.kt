@@ -11,4 +11,13 @@ object SpeciesData {
 
     @JvmStatic
     val NIDORAN_F = PokemonSpecies.getByName("nidoranf")!!
+
+    @JvmStatic
+    val RAICHU = PokemonSpecies.getByName("raichu")!!
+
+    @JvmStatic
+    val PIKACHU = PokemonSpecies.getByName("pikachu")!!
+
+    @JvmStatic
+    val PICHU = PokemonSpecies.getByName("pichu")!!
 }
