@@ -107,7 +107,7 @@ object CommandBase : TabExecutor {
                         sender.sendMessage("§c${parent2Slot}为空槽!")
                         return false
                     }
-                    val egg = BreedLogicManager.breedLogic.makeEggPokemon(parent1, parent2)
+                    val egg = BreedLogicManager.breedLogic.makeEgg(parent1, parent2)
                     egg?.let {
                         sender.sendMessage("孵化过程跳过了因为没有写!")
                         party.add(it)

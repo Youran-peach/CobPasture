@@ -44,7 +44,7 @@ class Pasture() {
             //事件触发
             val event = PastureMakeEggEvent(
                 this,
-                BreedLogicManager.breedLogic.makeEggPokemon(parent1!!, parent2!!)
+                BreedLogicManager.breedLogic.makeEgg(parent1!!, parent2!!)
             )
             Bukkit.getServer().pluginManager.callEvent(event)
             if (event.isCancelled) return

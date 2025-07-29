@@ -32,7 +32,7 @@ object BreedLogicImpl : BreedLogic {
         //判断非百变怪那只精灵的蛋组出来
         val groups = (if (isDitto1) parent2.species.eggGroups else parent1.species.eggGroups) as Set<EggGroup>
         if (groups.isEmpty()) return false
-        return groups.find { it == EggGroup.UNDISCOVERED } != null
+        return groups.first() != EggGroup.UNDISCOVERED
     }
 
     override fun makeEgg(
