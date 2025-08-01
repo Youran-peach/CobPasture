@@ -16,6 +16,8 @@ incubation-time: 24000
 offline-support: true
 #红线道具使用后是否消耗
 destinyknot-consume: true
+#不变之石是否消耗
+everstone-consume: true
 #gui配置
 gui:
   party-select-gui:

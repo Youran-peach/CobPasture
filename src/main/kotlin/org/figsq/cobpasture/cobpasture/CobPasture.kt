@@ -3,6 +3,8 @@ package org.figsq.cobpasture.cobpasture
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.figsq.cobpasture.cobpasture.api.breedlogic.BreedLogicManager
+import org.figsq.cobpasture.cobpasture.api.breedlogic.genetic.IVGenetic
+import org.figsq.cobpasture.cobpasture.api.breedlogic.genetic.NatureGenetic
 import org.figsq.cobpasture.cobpasture.api.playerdata.DataManager
 import org.figsq.cobpasture.cobpasture.gui.GuiConfig
 
@@ -47,6 +49,9 @@ class CobPasture : JavaPlugin() {
         BreedLogicManager.load()
         DataManager.load()
         ListenerBase.load()
+        /*两个遗传的特殊配置*/
+        IVGenetic.load()
+        NatureGenetic.load()
     }
 
     override fun onDisable() {
