@@ -14,6 +14,8 @@ incubation-time: 24000
 #有缓存期间，牧场还能继续工作，但如果服务器启动后，玩家没有进入过服务器，缓存则不存在。
 #玩家的牧场也就不会工作，这样可以让忘记至少会启动游戏，而不是直接甩给服务器等牧场
 offline-support: true
+#红线道具使用后是否消耗
+destinyknot-consume: true
 #gui配置
 gui:
   party-select-gui:
