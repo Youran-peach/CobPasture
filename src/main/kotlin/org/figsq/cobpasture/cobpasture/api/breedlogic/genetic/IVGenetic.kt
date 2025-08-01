@@ -19,15 +19,17 @@ object IVGenetic : IGeneticHandler {
     ) {
         if (!hasDestinyKnot(parent1, parent2)) return
         val notGenetic = Stats.PERMANENT.random()
-        for (stat in Stats.entries) {
+        for (stat in Stats.PERMANENT) {
             if (notGenetic == stat) continue
-            egg.setIV(stat,if (Random.nextBoolean()) parent1.ivs[stat]!! else parent2.ivs[stat]!!)
+            egg.setIV(stat, if (Random.nextBoolean()) parent1.ivs[stat]!! else parent2.ivs[stat]!!)
         }
     }
 
 
     fun hasDestinyKnot(parent1: Pokemon, parent2: Pokemon): Boolean {
-        return "destiny_knot" == CobblemonHeldItemManager.showdownId(parent1.heldItem()) ||
-                "destiny_knot" == CobblemonHeldItemManager.showdownId(parent2.heldItem())
+        val showdownId = CobblemonHeldItemManager.showdownId(parent1.heldItem())
+        println(showdownId)
+        return "destinyknot" == showdownId ||
+                "destinyknot" == CobblemonHeldItemManager.showdownId(parent2.heldItem())
     }
 }

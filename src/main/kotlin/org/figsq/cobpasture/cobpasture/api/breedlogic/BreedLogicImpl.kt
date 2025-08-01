@@ -42,19 +42,14 @@ object BreedLogicImpl : BreedLogic {
         if (!canBreed(parent1, parent2)) return null //不可产出返回空
         //选择继承后的宝可梦物种
         val egg = selectSpecies(parent1, parent2).create(level = 1)
-        geneticData(parent1, parent2, egg)
-        return egg
-    }
-
-    private fun geneticData(parent1: Pokemon, parent2: Pokemon, egg: Pokemon) {
-        //遗传
         BreedLogicManager.geneticHandlers.forEach { it.handle(parent1, parent2, egg) }
+        return egg
     }
 
     private fun selectSpecies(parent1: Pokemon, parent2: Pokemon): Species {
         val secondary = if (
             parent1.species == DITTO && (parent2.species != DITTO || parent2.gender == Gender.MALE)
-        ) parent1 to parent2 else parent2 to parent1
+        ) parent2 to parent1 else parent1 to parent2
 
         val lowestForm = lowestForm(secondary.first.form)
         //规则 若生蛋的母方是尼多兰或者亲代是尼多朗或其进化形和百变怪*，子代由性别*决定是尼多兰还是尼多朗
