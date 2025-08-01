@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.pokemon.Species
 import org.figsq.cobpasture.cobpasture.api.breedlogic.SpeciesData.DITTO
 import org.figsq.cobpasture.cobpasture.api.breedlogic.SpeciesData.NIDORAN_F
 import org.figsq.cobpasture.cobpasture.api.breedlogic.SpeciesData.NIDORAN_M
+import org.figsq.cobpasture.cobpasture.config.DoubleDitto
 import kotlin.random.Random
 
 object BreedLogicImpl : BreedLogic {
@@ -28,7 +29,7 @@ object BreedLogicImpl : BreedLogic {
             return false
         }
         //都是百变怪的情况下
-        if (isDitto1 && isDitto2) return false
+        if (isDitto1 && isDitto2) return DoubleDitto.enable
         //判断非百变怪那只精灵的蛋组出来
         val groups = (if (isDitto1) parent2.species.eggGroups else parent1.species.eggGroups) as Set<EggGroup>
         if (groups.isEmpty()) return false
@@ -47,10 +48,14 @@ object BreedLogicImpl : BreedLogic {
     }
 
     private fun selectSpecies(parent1: Pokemon, parent2: Pokemon): Species {
+        //双百变的处理 (随机物种的幼年期)
+        if (parent1.species == DITTO && parent2.species == DITTO)
+            return lowestForm(PokemonSpecies.random().standardForm).species
+
+
         val secondary = if (
             parent1.species == DITTO && (parent2.species != DITTO || parent2.gender == Gender.MALE)
         ) parent2 to parent1 else parent1 to parent2
-
         val lowestForm = lowestForm(secondary.first.form)
         //规则 若生蛋的母方是尼多兰或者亲代是尼多朗或其进化形和百变怪*，子代由性别*决定是尼多兰还是尼多朗
         if (lowestForm.species.name.startsWith("nidoran",false)) {
@@ -60,11 +65,11 @@ object BreedLogicImpl : BreedLogic {
         if (lowestForm.species.name in setOf("Illumise", "Volbeat"))
             return PokemonSpecies.getByName(if (Random.nextBoolean()) "illumise" else "volbeat")!!
         //规则 玛纳霏只能与百变怪生蛋，子代必定为霏欧纳。
-        if (secondary.first.species.name == "Manaphy") return PokemonSpecies.getByName("phione")!!
+        if (secondary.first.species.name == "Manaphy")
+            return PokemonSpecies.getByName("phione")!!
         //规则 月月熊（赫月）和百变怪生蛋，子代为熊宝宝。
-        if (secondary.first.species.name == "Ursaluna" && secondary.first.form.name == "Bloodmoon") return PokemonSpecies.getByName(
-            "teddiursa"
-        )!!
+        if (secondary.first.species.name == "Ursaluna" && secondary.first.form.name == "Bloodmoon")
+            return PokemonSpecies.getByName("teddiursa")!!
         return BreedLogicManager.incenseHandler.handle(parent1, parent2) ?: lowestForm(secondary.first.form).species
     }
 
